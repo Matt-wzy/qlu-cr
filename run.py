@@ -12,6 +12,11 @@ from get_course_on_table import multidict,load_dict
 from get_schedule import school_schedule,exam_remain_day
 import sys,os
 import requests
+from gevent import pywsgi
+# log
+import logging
+logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(message)s',filename='userip.log')
+logger = logging.getLogger(__name__)
 
 
 # render_template , 直接会在templates里边找xx.html文件
@@ -51,7 +56,8 @@ def index():
 
     #2023考研倒计时
     exam_day = exam_remain_day()
-
+    ip = request.headers.get('CF-Connecting-IP')
+    logger.warning(ip)
     return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign)
 
 
@@ -132,6 +138,7 @@ def post():
 
 
 if __name__ == '__main__':
-    app.run(debug=False) # 修改代码会立即生效
+    server = pywsgi.WSGIServer(('0.0.0.0',5000),app)
+    server.serve_forever()
     
 
