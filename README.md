@@ -1,6 +1,6 @@
 # qlu-cr
  查询校内空教室
-> [demo 地址](https://qlu-cr.herokuapp.com/)
+> [demo 地址](https://classroom.matt-wang.me/)
 
 能力有限，欢迎issue和pull😊
 
@@ -10,7 +10,7 @@
 1. 在```get_schedule.py```文件中修改开学时间（开学那周的周一）
 ```python
 # <<<<<!!!定义开学那周的周一!!!>>>>>
-year,month,day=2022,8,22
+year,month,day=2024,2,20
 ```
 2. 在 ```get_course_on_table.py```中提供在 [教务系统](http://jwxt-qlu-edu-cn.vpn.qlu.edu.cn/) 中的cookie，并且运行一次获得数据包
 ```python
@@ -28,7 +28,8 @@ Cookie = "抓取提供"
 - [ ] 菏泽
 - [ ] 历城
 - [ ] 彩石
-
+  
+  理论上来讲，本项目仅需要简单更改便可适配全部湖南强智教务系统，由于本人只有一个本校的学生账号权限，暂无权限研究其他学校的实际情况，有需要可提issue。
   
 
   
