@@ -87,9 +87,11 @@ def get_time(addday=0):
 
 #记得传列表
 def is_available(count_list):
+    if count_list[0] == 0:
+        return False
     for count in count_list:
         #print(count,type(count))
-        if count==None or count==0:
+        if count==None:
             return False
     if count_list[0]==count_list[1]:
         return False
