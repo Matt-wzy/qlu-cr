@@ -39,11 +39,17 @@ def count_pv(dt,hm):
     with open("./static/data/pv.csv", "r+") as f:
         pv=f.read()
         pv=pv.split(' ')
-        mancount=int(pv[2])+1
+        if len(pv) < 3:
+            mancount = 1
+        elif pv[2] == '':
+            mancount = 1
+        else:
+            mancount=int(pv[2])+1   
         if pv[0]==dt:
             pass
         else:
             mancount = 1
+    with open("./static/data/pv.csv", "w") as f:
         f.write(dt+' '+hm+' '+str(mancount))
     return mancount
 
@@ -55,7 +61,7 @@ app = Flask(__name__)
 
 @app.route("/")
 def index():
-
+    hint = ''
     weeks,week_i=school_schedule()
 
     dt, hm = get_time()
@@ -66,9 +72,17 @@ def index():
     #2024考研倒计时
     exam_day = exam_remain_day()
     ip = request.headers.get('CF-Connecting-IP')
+    Proto = request.headers.get('X-Forwarded-Proto')
+    if Proto == 'http':
+        hint += "你知道么？其实我们支持https访问哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> 。<br>"
+    host = request.headers.get('Host')
+    if host != 'classroom.matt-wang.me':
+        hint += "你知道么？我们的域名是classroom.matt-wang.me哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> .<br>此链接可以支持校外网络访问哦~"
+        ip = request.remote_addr
+    
     logger.warning(ip)
 
-    return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount)
+    return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint)
 
 
 
