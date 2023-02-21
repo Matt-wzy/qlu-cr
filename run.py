@@ -36,8 +36,23 @@ def get_lib_seat():
 
 
 def count_pv(dt,hm):
+    with open("./static/data/people.json", "r") as f: 
+        mancount=f.read()
+        mancount=int(mancount)+1
+    with open("./static/data/pv.csv", "r") as f:
+        pv=f.read()
+        pv=pv.split(' ')
+        if pv[0]==dt:
+            pass
+        else:
+            mancount = 1
+    with open("./static/data/people.json", "w") as f: 
+        f.write(str(mancount))
     with open("./static/data/pv.csv", "w") as f: # 再存储到文件中
         f.write(dt+' '+hm)
+
+    return mancount
+
 
 
 
@@ -50,15 +65,16 @@ def index():
     weeks,week_i=school_schedule()
 
     dt, hm = get_time()
-    count_pv(dt, hm)
+    mancount = count_pv(dt, hm)
     # 获取时间和图书馆座位信息
     dt, hm, av_seat_list, un_seat_list,seat_sign=get_lib_seat()
 
-    #2023考研倒计时
+    #2024考研倒计时
     exam_day = exam_remain_day()
     ip = request.headers.get('CF-Connecting-IP')
     logger.warning(ip)
-    return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign)
+
+    return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount)
 
 
 
