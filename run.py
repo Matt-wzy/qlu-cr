@@ -36,21 +36,15 @@ def get_lib_seat():
 
 
 def count_pv(dt,hm):
-    with open("./static/data/people.json", "r") as f: 
-        mancount=f.read()
-        mancount=int(mancount)+1
-    with open("./static/data/pv.csv", "r") as f:
+    with open("./static/data/pv.csv", "r+") as f:
         pv=f.read()
         pv=pv.split(' ')
+        mancount=int(pv[2])+1
         if pv[0]==dt:
             pass
         else:
             mancount = 1
-    with open("./static/data/people.json", "w") as f: 
-        f.write(str(mancount))
-    with open("./static/data/pv.csv", "w") as f: # 再存储到文件中
-        f.write(dt+' '+hm)
-
+        f.write(dt+' '+hm+' '+str(mancount))
     return mancount
 
 
