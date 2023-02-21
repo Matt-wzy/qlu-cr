@@ -44,6 +44,7 @@ def count_pv(dt,hm):
             pass
         else:
             mancount = 1
+    with open("./static/data/pv.csv", "w") as f:
         f.write(dt+' '+hm+' '+str(mancount))
     return mancount
 
