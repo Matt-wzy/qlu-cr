@@ -1,4 +1,5 @@
 
+from collections import Counter
 from flask import (
     Flask,
     render_template,
@@ -101,10 +102,6 @@ def get():
     
 
 
-
-
-
-
 @app.route("/post", methods=["POST"])
 def post():
     dt, hm = get_time()
@@ -156,7 +153,23 @@ def post():
 
     return render_template("result.html",dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign)
 
+@app.route("/get_pv")
+def get_pv():
+    with open("./static/data/pv.csv", "r") as f:
+        pv=f.read()
+        pv=pv.split(' ')
+        mancount = pv[2]
+    # return pv[2]
+    # 读取日志并分析ip访问次数
+    with open("./userip.log", "r") as f:
+        ip_list = f.readlines()[-int(mancount):]
+        ip_list = [i.split(' ')[-1].strip() for i in ip_list]
+        ip_count = Counter(ip_list)
+        ip_count = sorted(ip_count.items(), key=lambda x: x[1], reverse=True)
+        # ip_count = ip_count[:10]
+        ip_count = [(i[0], i[1]) for i in ip_count]
 
+    return render_template("pvcount.html",visit_people=mancount,ip_count=ip_count)
 
 
 
