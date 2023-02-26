@@ -17,7 +17,7 @@ import requests
 from gevent import pywsgi
 # log
 import logging
-logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(message)s',filename='userip.log')
+logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(message)s',filename='run.log')
 logger = logging.getLogger(__name__)
 executor = ThreadPoolExecutor()
 
