@@ -82,9 +82,10 @@ def index():
     mancount = count_pv(dt, hm)
     # 获取时间和图书馆座位信息
     dt, hm, av_seat_list, un_seat_list,seat_sign=get_lib_seat()
-    for i in [av_seat_list,un_seat_list]:
-        if len(i) == 0:
-            i = [{ 'area_name': '---', 'available_num': '---'}]
+    if len(av_seat_list) == 0:
+        av_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
+    if len(un_seat_list) == 0:
+        un_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
     #2024考研倒计时
     exam_day = exam_remain_day()
     ip = request.headers.get('CF-Connecting-IP')
@@ -177,9 +178,10 @@ def post():
 
     # 获取时间和图书馆座位信息
     dt, hm, av_seat_list, un_seat_list,seat_sign=get_lib_seat()
-    for i in [av_seat_list,un_seat_list]:
-        if len(i) == 0:
-            i = [{ 'area_name': '---', 'available_num': '---'}]
+    if len(av_seat_list) == 0:
+        av_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
+    if len(un_seat_list) == 0:
+        un_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
 
     return render_template("result.html",dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,title='QLU教室查询')
 
