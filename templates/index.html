@@ -1,34 +1,7 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=0.5, user-scalable=yes">
-
-    <link rel="shortcut icon" href="./static/img//QLUT.ico"/>
-    <link rel="bookmark" href="./static/img//QLUT.ico"/>
-
-
-    <title>齐鲁工业大学 空教室查询</title>
-        <style>
-        body {
-            width: 400px;
-            margin: 0 auto;
-        }
-    </style>
-<!--    <link rel="stylesheet" href="../static/theme/style.css">-->
-
-
-<!--保证复选框至少有一项-->
- <script src="./static/JavaScript/jquery.min.js"></script>
-
-
-
-
-
-
-</script>
-
-</head>
+{% include 'head.html' %}
 
 
 <body>
@@ -79,42 +52,8 @@
 
 
     <h4 style = "text-align:center" >{{dt}} {{hm}}</h4>
-    <h3 style = "text-align:center" >📖 图书馆座位情况</h3>
-    <div style="padding:3px; " >
-        <h4>以下区域有座 ✅</h4>
-        <table border="0" style="margin : auto;text-align: center;border-spacing: 15px 5px;" cellspacing="15">
-            <tr>
-                <th>区域</th>
-                <th>剩余空座</th>
-            </tr>
-            {% for area in av_seat_list %}
-            <tr>
-                <td>{{area.area_name}}</td>
-                <td>{{area.available_num}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
 
-
-    <div style="padding:3px; ">
-        <h4>以下区域无座 ❌</h4>
-
-        <table border="0" style="margin : auto;text-align: center;border-spacing: 15px 5px;" cellspacing="15">
-            <tr>
-                <th>区域</th>
-                <th>剩余空座</th>
-            </tr>
-            {% for area in un_seat_list %}
-            <tr>
-                <td>{{area.area_name}}</td>
-                <td>{{area.available_num}}</td>
-            </tr>
-            {% endfor %}
-        </table>
-    </div>
-
-
+  {% include 'lib.html' %}
 
     <div align ="center">
         今日共获得 <b>{{visit_people}}</b>次访问<br>

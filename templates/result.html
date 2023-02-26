@@ -1,22 +1,9 @@
 <!DOCTYPE html>
 <html lang="en">
 
-<head>
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=0.5, user-scalable=yes">
-
-    <link rel="shortcut icon" href="./static/img//QLUT.ico"/>
-    <link rel="bookmark" href="./static/img//QLUT.ico"/>
-
-
-    <title>齐鲁工业大学 空教室查询</title>
-    <style>
-        body {
-            width: 380px;
-            margin: 0 auto;
-        }
-    </style>
+{% include 'head.html' %}
 <!--    <link rel="stylesheet" href="../static/theme/style.css">-->
-</head>
+
 
 
 <body>
@@ -34,23 +21,7 @@
     <p  style = "text-align:center" ><button onclick="window.location.href='{{ url_for("index") }}'">🔚返回</button></p>
 
 
-
-    <h3 style = "text-align:center" >📖 图书馆座位情况</h3>
-    <div style="border:1px solid #999;padding:3px; ">
-        <h4>以下区域有座 ✅</h4>
-        {% for area in av_seat_list %}
-        <li>{{area.area_id}} &nbsp;: {{area.area_name}}&nbsp;&nbsp; {{seat_sign}} {{area.available_num}}</li>
-        {% endfor %}
-    </div>
-
-
-    <div style="border:1px solid #999;padding:3px; ">
-        <h4>以下区域无座 ❌</h4>
-
-        {% for area in un_seat_list %}
-        <li>{{area.area_id}} &nbsp;: {{area.area_name}}&nbsp;&nbsp; {{seat_sign}}：{{area.available_num}}</li>
-        {% endfor %}
-    </div>
+{% include 'lib.html' %}
 
     <div align ="center">
         致谢：本站服务器托管于<a href="https://adam.sethome.cc">齐鲁工业大学Adam战队</a>，网页原作者GitHub账号Annihilatexv,内网服务搭建人GitHub：Matt-wzy

@@ -77,12 +77,14 @@ app = Flask(__name__)
 def index():
     hint = ''
     weeks,week_i=school_schedule()
-
+    
     dt, hm = get_time()
     mancount = count_pv(dt, hm)
     # 获取时间和图书馆座位信息
     dt, hm, av_seat_list, un_seat_list,seat_sign=get_lib_seat()
-
+    for i in [av_seat_list,un_seat_list]:
+        if len(i) == 0:
+            i = [{ 'area_name': '---', 'available_num': '---'}]
     #2024考研倒计时
     exam_day = exam_remain_day()
     ip = request.headers.get('CF-Connecting-IP')
@@ -105,7 +107,7 @@ def index():
         pass
     # logger.warning(ip)
 
-    return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint)
+    return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint,title='QLU教室查询')
 
 
 
@@ -175,16 +177,18 @@ def post():
 
     # 获取时间和图书馆座位信息
     dt, hm, av_seat_list, un_seat_list,seat_sign=get_lib_seat()
+    for i in [av_seat_list,un_seat_list]:
+        if len(i) == 0:
+            i = [{ 'area_name': '---', 'available_num': '---'}]
 
-
-    return render_template("result.html",dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign)
+    return render_template("result.html",dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,title='QLU教室查询')
 
 @app.route("/get_pv")
 def get_pv():
     today_man,today_ip,intranet_man = get_ip('today')
     all_man,all_ip,all_intranet_man = get_ip('all')
     executor.submit(refresh_frequent)
-    return render_template("pvcount.html",visit_people=today_man,ip_count=today_ip,all_visit_people = all_man,all_ip_count = all_ip,intranet_visit_people = intranet_man,all_intranet_visit_people = all_intranet_man)
+    return render_template("pvcount.html",visit_people=today_man,ip_count=today_ip,all_visit_people = all_man,all_ip_count = all_ip,intranet_visit_people = intranet_man,all_intranet_visit_people = all_intranet_man,title='人数统计')
 
 @app.route("/status")
 def get_status():
