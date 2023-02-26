@@ -29,6 +29,25 @@
         {% endfor %}
     </table>
     
-    
+    <div>
+        总计访问人数： {{all_visit_people}}
+    </div>
+    <div>
+
+    </div>
+    <table border="1">
+        <tr>
+            <th>访问ip</th>
+            <th>访问次数</th>
+        </tr>
+        {% for ip in all_ip_count %}
+        <tr>
+            <td>{{ip[0]}}</td>
+            <td>{{ip[1]}}</td>
+
+        </tr>
+        {% endfor %}
+    </table>
+
 </body>
 </html>

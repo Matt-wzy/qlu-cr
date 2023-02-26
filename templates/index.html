@@ -11,7 +11,7 @@
     <title>齐鲁工业大学 空教室查询</title>
         <style>
         body {
-            width: 380px;
+            width: 400px;
             margin: 0 auto;
         }
     </style>
@@ -35,8 +35,8 @@
 
     <h2 style = "text-align:center" >2024考研倒计时：⌛ {{exam_day}}天</h2>
     <h3 style = "text-align:center" ><font  color="red">‍🎓加油xdm!🎓‍</font></h3>
-    <h3 style="text-align:center">今日共获得 {{visit_people}}次访问</h3>
-    <h3>{{hint_a | safe}}</h3>
+    <!-- <h3 style="text-align:center">今日共获得 {{visit_people}}次访问</h3> -->
+    <div>{{hint_a | safe}}</div>
 
     <h4 style = "text-align:center" >🈳 教室查询</h4>
     <form action="/post" METHOD="post">
@@ -80,26 +80,45 @@
 
     <h4 style = "text-align:center" >{{dt}} {{hm}}</h4>
     <h3 style = "text-align:center" >📖 图书馆座位情况</h3>
-    <div style="border:1px solid #999;padding:3px; ">
+    <div style="padding:3px; " >
         <h4>以下区域有座 ✅</h4>
-        {% for area in av_seat_list %}
-        <li>{{area.area_id}} &nbsp;: {{area.area_name}}&nbsp;&nbsp; {{seat_sign}} {{area.available_num}}</li>
-        {% endfor %}
+        <table border="0" style="margin : auto;text-align: center;border-spacing: 15px 5px;" cellspacing="15">
+            <tr>
+                <th>区域</th>
+                <th>剩余空座</th>
+            </tr>
+            {% for area in av_seat_list %}
+            <tr>
+                <td>{{area.area_name}}</td>
+                <td>{{area.available_num}}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 
 
-    <div style="border:1px solid #999;padding:3px; ">
+    <div style="padding:3px; ">
         <h4>以下区域无座 ❌</h4>
 
-        {% for area in un_seat_list %}
-        <li>{{area.area_id}} &nbsp;: {{area.area_name}}&nbsp;&nbsp; {{seat_sign}} {{area.available_num}}</li>
-        {% endfor %}
+        <table border="0" style="margin : auto;text-align: center;border-spacing: 15px 5px;" cellspacing="15">
+            <tr>
+                <th>区域</th>
+                <th>剩余空座</th>
+            </tr>
+            {% for area in un_seat_list %}
+            <tr>
+                <td>{{area.area_name}}</td>
+                <td>{{area.available_num}}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
 
 
 
     <div align ="center">
-        致谢：本站服务器托管于<a href="https://adam.sethome.cc">齐鲁工业大学Adam战队</a>，网页原作者GitHub账号Annihilatexv,内网服务搭建人GitHub：Matt-wzy
+        今日共获得 <b>{{visit_people}}</b>次访问<br>
+        致谢：本站服务器托管于<a href="https://adam.sethome.cc" target="_blank">齐鲁工业大学Adam战队</a>，网页原作者GitHub账号Annihilatexv,内网服务搭建人GitHub：Matt-wzy<br>视频聊天区可留言: <a href="https://www.bilibili.com/video/BV1sT411C73i/?share_source=copy_web&vd_source=1349826e7af1b515516bd815714d21a4" target="_blank">点我直达</a>
     </div>
 
 
@@ -109,11 +128,7 @@
             <img src="./static/img/github.png" alt="github.png" border="0" width="100" height="100" align="middle" />
         </a>
     </div>
-    <!-- get示例  -->
-    <!--
-    <h3>GET请求</h3>
-    <p><a href="/get ">get</a></p>
-    -->
+
 </body>
 
 

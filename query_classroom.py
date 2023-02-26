@@ -67,7 +67,8 @@ def query_room(week_now,week_i_now,course_i_now):
 def pretty(available_room_filtered):
     available_room_filtered = sorted(available_room_filtered, key=str.swapcase)
     # available_room = sorted(available_room,key= lambda i:i[0])
-
+    if len(available_room_filtered) == 0:
+        return ['没有可用的教室，运气爆棚，hahaha!']
     available_room_pretty = ['————————————————', available_room_filtered[0]]
 
     # 美化一下

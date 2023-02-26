@@ -7,6 +7,7 @@ from flask import (
     jsonify,
 )
 
+from concurrent.futures import ThreadPoolExecutor
 from qlu_lib import nowtime,get_time,query
 from query_classroom import  query_room
 from get_course_on_table import multidict,load_dict
@@ -18,7 +19,7 @@ from gevent import pywsgi
 import logging
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(message)s',filename='userip.log')
 logger = logging.getLogger(__name__)
-
+executor = ThreadPoolExecutor()
 
 # render_template , 直接会在templates里边找xx.html文件
 
@@ -37,7 +38,11 @@ def get_lib_seat():
 
 
 def count_pv(dt,hm):
-    with open("./static/data/pv.csv", "r+") as f:
+    if os.path.exists("./static/data/pv.json") == False:
+        with open("./static/data/pv.json", "w") as f:
+            f.write(dt+' '+hm+' 1')
+        mancount = 1
+    with open("./static/data/pv.json", "r+") as f:
         pv=f.read()
         pv=pv.split(' ')
         if len(pv) < 3:
@@ -50,8 +55,16 @@ def count_pv(dt,hm):
             pass
         else:
             mancount = 1
-    with open("./static/data/pv.csv", "w") as f:
+    with open("./static/data/pv.json", "w") as f:
         f.write(dt+' '+hm+' '+str(mancount))
+    # with open("./static/data/userip.json", "r") as f:
+    #     ip_list = f.readlines()
+    #     ip_list = [i.split('--')[-1].strip() for i in ip_list]
+    #     ip_count = Counter(ip_list)
+    #     ip_count = sorted(ip_count.items(), key=lambda x: x[1], reverse=True)
+    #     # ip_count = ip_count[:10]
+    #     ip_count = [(i[0], i[1]) for i in ip_count]
+        
     return mancount
 
 
@@ -78,10 +91,19 @@ def index():
         hint += "你知道么？其实我们支持https访问哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> 。<br>"
     host = request.headers.get('Host')
     if host != 'classroom.matt-wang.me':
-        hint += "你知道么？我们的域名是classroom.matt-wang.me哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> .<br>此链接可以支持校外网络访问哦~"
+        hint += "你知道么？我们的域名是classroom.matt-wang.me哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> .  此链接可以支持校外网络访问哦~"
         ip = request.remote_addr
-    
-    logger.warning(ip)
+    with open("./static/data/userip.json", "a") as f:
+        f.write('\n'+dt+"--"+hm+"--"+ip)
+    try:
+        with open("./static/data/frequent.json", "r") as f:
+            ip_list = f.readlines()
+            ip_list = [x.strip() for x in ip_list]
+            if ip in ip_list:
+                hint+= "<br>是老朋友啊！如果觉得好用的话欢迎推荐给朋友哦~"
+    except:
+        pass
+    # logger.warning(ip)
 
     return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint)
 
@@ -116,8 +138,12 @@ def post():
     dic_form= request.form
     course_i = request.form.getlist('test[]')
     bro_agent=request.user_agent
-    print('%s %s\n从%s\n收到的表单为：\n'%(dt, hm,bro_agent),dic_form,course_i,'\n')
-
+    # print('%s %s\n从%s\n收到的表单为：\n'%(dt, hm,bro_agent),dic_form,course_i,'\n')
+    ip = request.headers.get('CF-Connecting-IP')
+    host = request.headers.get('Host')
+    if host != 'classroom.matt-wang.me':
+        ip = request.remote_addr
+    logger.warning(ip+' '+dic_form['weeks']+' '+dic_form['week_i']+' '+str(course_i))
 
     # 判断是否为今天
     if dic_form['weeks']:
@@ -155,24 +181,41 @@ def post():
 
 @app.route("/get_pv")
 def get_pv():
-    with open("./static/data/pv.csv", "r") as f:
-        pv=f.read()
-        pv=pv.split(' ')
-        mancount = pv[2]
-    # return pv[2]
-    # 读取日志并分析ip访问次数
-    with open("./userip.log", "r") as f:
-        ip_list = f.readlines()[-int(mancount):]
-        ip_list = [i.split(' ')[-1].strip() for i in ip_list]
-        ip_count = Counter(ip_list)
-        ip_count = sorted(ip_count.items(), key=lambda x: x[1], reverse=True)
-        # ip_count = ip_count[:10]
-        ip_count = [(i[0], i[1]) for i in ip_count]
+    today_man,today_ip = get_ip('today')
+    all_man,all_ip = get_ip('all')
+    executor.submit(refresh_frequent)
+    return render_template("pvcount.html",visit_people=today_man,ip_count=today_ip,all_visit_people = all_man,all_ip_count = all_ip)
 
-    return render_template("pvcount.html",visit_people=mancount,ip_count=ip_count)
+def refresh_frequent():
+    with open('./static/data/userip.json', 'r') as f:
+        ip_list = f.readlines()
+        ip_list = [x.strip() for x in ip_list]
+        ip_list = [x.strip() for x in ip_list if x.strip()!='']
+        final_ip_list = [i.split('--')[-1].strip() for i in ip_list]
+        ip_count_total = Counter(final_ip_list)
+        ip_count_total = sorted(ip_count_total.items(), key=lambda x: x[1], reverse=True)
+        ip_count_total = [(i[0], i[1]) for i in ip_count_total]
+    with open('./static/data/frequent.json', 'w+') as f:
+        for i in ip_count_total[:5]:
+            f.write(i[0]+'\n')
 
+def get_ip(model = 'today'):
+    dt, hm = get_time()
+    with open('./static/data/userip.json', 'r') as f:
+        ip_list = f.readlines()
+        ip_list = [x.strip() for x in ip_list]
+        ip_list = [x.strip() for x in ip_list if x.strip()!='']
+        # time_list = [i.split('--')[0].strip() for i in ip_list]
+        if model == 'today':
+            ip_list = [i.split('--')[-1].strip() for i in ip_list if i.split('--')[0].strip()==dt]
+        else :
+            ip_list = [i.split('--')[-1].strip() for i in ip_list]
 
-
+        mancount = len(ip_list)
+        ip_count2 = Counter(ip_list)
+        ip_count2 = sorted(ip_count2.items(), key=lambda x: x[1], reverse=True)
+        ip_count2 = [(i[0], i[1]) for i in ip_count2]
+    return mancount,ip_count2
 
 if __name__ == '__main__':
     server = pywsgi.WSGIServer(('0.0.0.0',5000),app)
