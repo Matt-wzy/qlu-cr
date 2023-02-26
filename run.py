@@ -210,6 +210,14 @@ def get_ip(model = 'today'):
             ip_list = [i.split('--')[-1].strip() for i in ip_list if i.split('--')[0].strip()==dt]
         else :
             ip_list = [i.split('--')[-1].strip() for i in ip_list]
+        # 判断ip为ipv4还是ipv6
+        if len(ip_list[0].split('.')) == 4:
+            ip_list = [i.split('.')[0]+'.'+i.split('.')[1]+'.'+i.split('.')[2]+'.*' for i in ip_list]
+        else:
+            ip_list = [i.split(':')[0]+':'+i.split(':')[1]+':'+i.split(':')[2]+':*:*:*:*:*' for i in ip_list]
+            
+        
+        # 将ip的后两位隐藏
 
         mancount = len(ip_list)
         ip_count2 = Counter(ip_list)
