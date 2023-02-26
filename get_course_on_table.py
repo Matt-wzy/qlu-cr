@@ -21,11 +21,11 @@ def get_table():
         'user-agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/90.0.4412.0 Safari/537.36 Edg/90.0.796.0',
         'Cookie': Cookie}
     #--------可能需要外部变量！
-    data = {#'xnxqh': '2021-2022-2',
-            'skyx': '',
-            'xqid': '1'}
+    data = {'xnxqh': '2022-2023-2',
+            'skyx': ''
+            }
 
-    course = requests.post(url3, headers=headers, data=data)
+    course = requests.post(url2, headers=headers, data=data)
 
     html = etree.HTML(course.text)
     # result = etree.tostring(html).decode('utf-8')
