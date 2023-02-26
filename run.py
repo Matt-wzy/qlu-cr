@@ -186,6 +186,10 @@ def get_pv():
     executor.submit(refresh_frequent)
     return render_template("pvcount.html",visit_people=today_man,ip_count=today_ip,all_visit_people = all_man,all_ip_count = all_ip)
 
+@app.route("/status")
+def get_status():
+    return "Good"
+
 def refresh_frequent():
     with open('./static/data/userip.json', 'r') as f:
         ip_list = f.readlines()
@@ -215,7 +219,7 @@ def get_ip(model = 'today'):
             ip_list = [i.split('.')[0]+'.'+i.split('.')[1]+'.'+i.split('.')[2]+'.*' for i in ip_list]
         else:
             ip_list = [i.split(':')[0]+':'+i.split(':')[1]+':'+i.split(':')[2]+':*:*:*:*:*' for i in ip_list]
-            
+
         
         # 将ip的后两位隐藏
 
