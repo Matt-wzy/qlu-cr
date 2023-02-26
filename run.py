@@ -204,6 +204,7 @@ def refresh_frequent():
             f.write(i[0]+'\n')
 
 def get_ip(model = 'today'):
+    ip_list_mark = []
     dt, hm = get_time()
     with open('./static/data/userip.json', 'r') as f:
         ip_list = f.readlines()
@@ -215,16 +216,16 @@ def get_ip(model = 'today'):
         else :
             ip_list = [i.split('--')[-1].strip() for i in ip_list]
         # 判断ip为ipv4还是ipv6
-        if len(ip_list[0].split('.')) == 4:
-            ip_list = [i.split('.')[0]+'.'+i.split('.')[1]+'.'+i.split('.')[2]+'.*' for i in ip_list]
-        else:
-            ip_list = [i.split(':')[0]+':'+i.split(':')[1]+':'+i.split(':')[2]+':*:*:*:*:*' for i in ip_list]
-
-        
+        print(ip_list)
+        for i in ip_list:
+            if len(i.split('.')) == 4:
+                ip_list_mark.append(i.split('.')[0]+'.'+i.split('.')[1]+'.'+i.split('.')[2]+'.*')
+            else:
+                ip_list_mark.append(i.split(':')[0]+':'+i.split(':')[1]+':'+i.split(':')[2]+':*:*:*:*:*')
         # 将ip的后两位隐藏
 
         mancount = len(ip_list)
-        ip_count2 = Counter(ip_list)
+        ip_count2 = Counter(ip_list_mark)
         ip_count2 = sorted(ip_count2.items(), key=lambda x: x[1], reverse=True)
         ip_count2 = [(i[0], i[1]) for i in ip_count2]
     return mancount,ip_count2
