@@ -4,3 +4,7 @@ __pycache__/
 .idea/
 static/data/pv.csv
 *.log
+*.csv
+*.json
+*.pkl
+*test*
