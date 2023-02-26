@@ -181,10 +181,10 @@ def post():
 
 @app.route("/get_pv")
 def get_pv():
-    today_man,today_ip = get_ip('today')
-    all_man,all_ip = get_ip('all')
+    today_man,today_ip,intranet_man = get_ip('today')
+    all_man,all_ip,all_intranet_man = get_ip('all')
     executor.submit(refresh_frequent)
-    return render_template("pvcount.html",visit_people=today_man,ip_count=today_ip,all_visit_people = all_man,all_ip_count = all_ip)
+    return render_template("pvcount.html",visit_people=today_man,ip_count=today_ip,all_visit_people = all_man,all_ip_count = all_ip,intranet_visit_people = intranet_man,all_intranet_visit_people = all_intranet_man)
 
 @app.route("/status")
 def get_status():
@@ -203,8 +203,8 @@ def refresh_frequent():
         for i in ip_count_total[:5]:
             f.write(i[0]+'\n')
 
-def get_ip(model = 'today'):
-    ip_list_mark = []
+def get_ip(model = 'today',hide = True):
+    ip_Intranet = []
     dt, hm = get_time()
     with open('./static/data/userip.json', 'r') as f:
         ip_list = f.readlines()
@@ -216,19 +216,24 @@ def get_ip(model = 'today'):
         else :
             ip_list = [i.split('--')[-1].strip() for i in ip_list]
         # 判断ip为ipv4还是ipv6
-        print(ip_list)
-        for i in ip_list:
-            if len(i.split('.')) == 4:
-                ip_list_mark.append(i.split('.')[0]+'.'+i.split('.')[1]+'.'+i.split('.')[2]+'.*')
-            else:
-                ip_list_mark.append(i.split(':')[0]+':'+i.split(':')[1]+':'+i.split(':')[2]+':*:*:*:*:*')
-        # 将ip的后两位隐藏
 
         mancount = len(ip_list)
-        ip_count2 = Counter(ip_list_mark)
+        ip_count2 = Counter(ip_list)
         ip_count2 = sorted(ip_count2.items(), key=lambda x: x[1], reverse=True)
         ip_count2 = [(i[0], i[1]) for i in ip_count2]
-    return mancount,ip_count2
+        if hide:
+            for i in ip_count2:
+                if len(i[0].split('.')) == 4:
+                    index = ip_count2.index(i)
+                    ip_count2[index] = (i[0].split('.')[0]+'.'+i[0].split('.')[1]+'.*.*', i[1])
+                    if i[0].split('.')[0] in ['10','172','192','127']:
+                        ip_Intranet.append([i[0],i[1]])
+                        ip_count2[index] = ('内网用户，ip不展示', i[1])
+
+                else:
+                    ip_count2[ip_count2.index(i)] = (i[0].split(':')[0]+':'+i[0].split(':')[1]+':'+i[0].split(':')[2]+':*:*:*:*:*', i[1])
+    intranet_man = len(ip_Intranet)
+    return mancount,ip_count2,intranet_man
 
 if __name__ == '__main__':
     server = pywsgi.WSGIServer(('0.0.0.0',5000),app)
