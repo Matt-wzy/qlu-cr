@@ -8,3 +8,4 @@ static/data/pv.csv
 *.json
 *.pkl
 *test*
+*.mmdb

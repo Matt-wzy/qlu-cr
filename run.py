@@ -102,7 +102,7 @@ def index():
     elif regoin is None:
         pass
     else:
-        hint += "尽管内网穿透服务提供商在美国，但是我们还是建议您使用直连的方式访问本站哦~（超小声）直连其实更快的<br>"
+        hint += "尽管内网穿透服务提供商是cloudflare，但是我们还是建议您使用直连的方式访问本站哦~（超小声）直连其实更快的<br>"
     if Proto == 'http':
         hint += "你知道么？其实我们支持https访问哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> 。<br>"
     host = request.headers.get('Host')
