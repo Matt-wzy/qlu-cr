@@ -6,26 +6,34 @@
 
 <body>
 
-    <div id = "result" style="display: none;">
-        <h3 style = "text-align:center" >{{dt}} {{hm}}</h3>
+    <h3 style = "text-align:center" >2024考研倒计时：⌛ {{exam_day}}天</h2>
+    <h4 style = "text-align:center" ><font  color="red">‍🎓加油xdm!🎓‍</font></h3>
+    <!-- <h3 style="text-align:center">今日共获得 {{visit_people}}次访问</h3> -->
+    <div id = 'hint'>{{hint_a | safe}}</div>
 
+    <h2 style = "text-align:center" id = 'tittle'>🈳 教室查询</h4>
+    
+    <div id="result-container" style="display: none;">
+        
         <h3 style = "text-align:center" >🧾 查询结果：</h3>
         <div style="border:3px solid #999;padding:3px; ">
-            <h3 style = "text-align:center">{{weeks}} {{week_i}}{{today}}<br>{{course_i}}</h3>
+            <h3 style = "text-align:center" id="wek"></h3>
             <h4 style = "text-align:center">以下教室可用</h4>
-                            {% for room in available_room %}
-            <li style = "text-align:center">{{room}}</li>
-            {% endfor %}
-        </div>
-    
-        <p  style = "text-align:center" ><button onclick="window.location.href='{{ url_for("index") }}'">🔚返回</button></p>
-    </div>
-    <h2 style = "text-align:center" >2024考研倒计时：⌛ {{exam_day}}天</h2>
-    <h3 style = "text-align:center" ><font  color="red">‍🎓加油xdm!🎓‍</font></h3>
-    <!-- <h3 style="text-align:center">今日共获得 {{visit_people}}次访问</h3> -->
-    <div>{{hint_a | safe}}</div>
+            <p  style = "text-align:center"><button id="reset-btn" style="display: none;">清空🔚</button></p>
+            <ul id="result"></ul>
 
-    <h4 style = "text-align:center" >🈳 教室查询</h4>
+        </div>
+        
+
+    </div>
+    <div id="error"></div>
+
+    <button id="retry" style="display: none;">重试</button>
+      
+    
+    
+    
+
     <form action="/post" METHOD="post">
         <p  style = "text-align:center" ><label for="weeks">周数 </label><input id="weeks" type="text" name="weeks" placeholder="当前是第{{weeks}}周(默认)，可不填"></p>
         <p  style = "text-align:center" ><label for="week_i"> 星期 </label><input id="week_i" type="text" name="week_i" placeholder="现在是星期{{week_i}}(默认)，可不填"></p>
@@ -34,23 +42,24 @@
 
         <p  style = "text-align:center" >
             早上:
-            <input type="checkbox" name="test[]" value="1" required>1-2节
-            <input type="checkbox" name="test[]" value="2" required>3-4节
+            <input type="checkbox" class = "test" name="test[]" value="1" id = 'morning1' required>1-2节
+            <input type="checkbox" class = "test" name="test[]" value="2" id = 'morning2' required>3-4节
         </p>
 
         <p  style = "text-align:center" >
             下午:
-            <input type="checkbox" name="test[]" value="3" required>5-6节
-            <input type="checkbox" name="test[]" value="4" required>7-8节
+            <input type="checkbox" class = "test" name="test[]" value="3" id = 'afternoon1' required>5-6节
+            <input type="checkbox" class = "test" name="test[]" value="4" id = 'afternoon2' required>7-8节
         </p>
 
         <p  style = "text-align:center" >
             晚上:
-            <input type="checkbox" name="test[]" value="5" required>9-10节
-            <input type="checkbox" name="test[]" value="6" required>第11节
+            <input type="checkbox"  class = "test" name="test[]" value="5" id = 'night1' required>9-10节
+            <input type="checkbox"  class = "test" name="test[]" value="6" id = 'night2' required>第11节
         </p>
 
-        <p  style = "text-align:center"><input  type="submit" value="查询🔎" ></p>
+        <!-- <p  style = "text-align:center"><input  type="submit" value="查询🔎" ></p> -->
+        <p  style = "text-align:center"><button id = 'key' type="button">查询🔎</button></p>
     </form>
 
 

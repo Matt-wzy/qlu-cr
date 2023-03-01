@@ -143,7 +143,51 @@ def get():
 
     return render_template("index.html")
     
+@app.route("/api/data", methods=["POST"])
+def api():
+    dt, hm = get_time()
+    is_today =1
 
+    # 获取当前周数和星期
+    weeks,week_i=school_schedule()
+    weeks,week_i=str(weeks),str(week_i)
+    available_room=['没有可用的教室，运气爆棚，hahaha!']
+
+    # 捕获收到的表单
+    dic_form= request.get_json()
+    course_i = request.get_json().get('test')
+    bro_agent=request.user_agent
+    # print('%s %s\n从%s\n收到的表单为：\n'%(dt, hm,bro_agent),dic_form,course_i,'\n')
+    # print(dic_form,course_i)
+    # 判断是否为今天
+    if dic_form['weeks']:
+        weeks=dic_form['weeks']
+        is_today = 0
+    if dic_form['week_i']:
+        week_i=dic_form['week_i']
+        is_today = 0
+    course_i = course_i.split(',')
+    # print(course_i.split(','))
+    available_room=query_room(weeks,week_i,course_i)
+    # print(available_room)
+    # 查询完后时间信息进行处理显示
+    if is_today:
+         today= '今天'
+         weeks,week_i='',''
+    else:
+        today=''
+        weeks='第'+weeks+'周'
+        week_i='星期'+week_i
+
+    co = "".join((lambda x: (x.sort(), x)[1])(course_i))
+    course_i='第'
+    for i in co:
+        course_i=course_i+str(int(i)*2-1)+('' if int(i)*2==12 else str(int(i)*2))+','
+    course_i=course_i[:-1]+'节课'
+    # print(available_room)
+    # dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room
+    res = jsonify({'status': 'success', 'available_room': available_room,'weeks':weeks,'week_i':week_i,'course_i':course_i,'today':today,'hint':'查询成功'})
+    return res, 200, {"Content-Type":"application/json"}
 
 @app.route("/post", methods=["POST"])
 def post():
