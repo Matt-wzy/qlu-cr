@@ -93,16 +93,21 @@ def index():
     ip = request.headers.get('CF-Connecting-IP')
     Proto = request.headers.get('X-Forwarded-Proto')
     regoin = None
+
     try:
-        regoin = ip_get_location(str(ip))
+        regoin,city = ip_get_location(str(ip))
     except Exception as e:
         pass
     if regoin == 'CN':
-        pass
+        if city == 'Jinan' or city is None :
+            pass
+        else:
+            hint += "oops,我们是齐鲁工业大学（长清校区）的空教室查询工具，如果您需要查询你们大学的空教室的话，可以参考下方的github仓库自行部署 。<br>"
     elif regoin is None:
         pass
     else:
-        hint += "尽管内网穿透服务提供商是cloudflare，但是我们还是建议您使用直连的方式访问本站哦~（超小声）直连其实更快的<br>"
+        hint += "尽管内网穿透服务提供商是cloudflare，但是我们还是建议您使用直连的方式访问本站哦~（超小声）直连其实更快的<br>"\
+
     if Proto == 'http':
         hint += "你知道么？其实我们支持https访问哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> 。<br>"
     host = request.headers.get('Host')
@@ -312,7 +317,7 @@ def ip_get_location(ip_address):
     # print(u'  [+] 纬度:            ' + str(Location_Latitude))
     # print(u'  [+] 经度 :           ' + str(Location_Longitude))
     # print('===============End======================')
-    return Country_IsoCode
+    return Country_IsoCode,City_Name
 # 检验和处理ip地址
 def seperate_ip(ip_address):
     ip_match = r"^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|0?[0-9]?[1-9]|0?[1-9]0)\.)(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-4]|2[0-4][0-9]|1[0-9][0-9]|0?[0-9]?[1-9]|0?[1-9]0)$"
