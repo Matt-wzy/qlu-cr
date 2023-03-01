@@ -6,6 +6,20 @@
 
 <body>
 
+    <div id = "result" style="display: none;">
+        <h3 style = "text-align:center" >{{dt}} {{hm}}</h3>
+
+        <h3 style = "text-align:center" >🧾 查询结果：</h3>
+        <div style="border:3px solid #999;padding:3px; ">
+            <h3 style = "text-align:center">{{weeks}} {{week_i}}{{today}}<br>{{course_i}}</h3>
+            <h4 style = "text-align:center">以下教室可用</h4>
+                            {% for room in available_room %}
+            <li style = "text-align:center">{{room}}</li>
+            {% endfor %}
+        </div>
+    
+        <p  style = "text-align:center" ><button onclick="window.location.href='{{ url_for("index") }}'">🔚返回</button></p>
+    </div>
     <h2 style = "text-align:center" >2024考研倒计时：⌛ {{exam_day}}天</h2>
     <h3 style = "text-align:center" ><font  color="red">‍🎓加油xdm!🎓‍</font></h3>
     <!-- <h3 style="text-align:center">今日共获得 {{visit_people}}次访问</h3> -->
@@ -54,19 +68,8 @@
     <h4 style = "text-align:center" >{{dt}} {{hm}}</h4>
 
   {% include 'lib.html' %}
+  {% include 'footer.html' %}
 
-    <div align ="center">
-        今日共获得 <b>{{visit_people}}</b>次访问<br>
-        致谢：本站服务器托管于<a href="https://adam.sethome.cc" target="_blank">齐鲁工业大学Adam战队</a>，网页原作者GitHub账号Annihilatexv,内网服务搭建人GitHub：Matt-wzy<br>视频聊天区可留言: <a href="https://www.bilibili.com/video/BV1sT411C73i/?share_source=copy_web&vd_source=1349826e7af1b515516bd815714d21a4" target="_blank">点我直达</a>
-    </div>
-
-
-
-    <div align="center">
-        <a href="https://github.com/Matt-wzy/qlu-cr">
-            <img src="./static/img/github.png" alt="github.png" border="0" width="100" height="100" align="middle" />
-        </a>
-    </div>
 
 </body>
 
