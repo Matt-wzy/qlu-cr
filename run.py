@@ -196,7 +196,7 @@ def post():
     if len(un_seat_list) == 0:
         un_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
 
-    return render_template("result.html",dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,title='QLU教室查询')
+    return render_template("result.html",dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,title='空教室查询结果')
 
 @app.route("/get_pv")
 def get_pv():
