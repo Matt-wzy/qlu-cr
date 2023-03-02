@@ -99,7 +99,7 @@ def index():
     except Exception as e:
         pass
     if regoin == 'CN':
-        if city == 'Jinan' or city is None :
+        if (city == 'Jinan') or (city == 'None') :
             pass
         else:
             hint += "oops,我们是齐鲁工业大学（长清校区）的空教室查询工具，如果您需要查询你们大学的空教室的话，可以参考下方的github仓库自行部署 。<br>"
