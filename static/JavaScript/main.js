@@ -64,9 +64,9 @@ submitButton.addEventListener('click', async () => {
     test: relocation,
   };
   const responseData = await postData('/api/data', data);
-  
+  isQuerying = false;
   if (responseData) {
-    isQuerying = false;
+    
     const available_rooms = responseData.available_room;
     const resultElement = document.getElementById('result');
     const weeks = document.getElementById('wek');
