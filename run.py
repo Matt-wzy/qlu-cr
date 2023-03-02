@@ -98,7 +98,7 @@ def index():
         regoin,city = ip_get_location(str(ip))
     except Exception as e:
         pass
-    if regoin == 'CN':
+    if regoin == 'CN' or regoin == 'None':
         if (city == 'Jinan') or (city == 'None') :
             pass
         else:
