@@ -129,19 +129,6 @@ def index():
     return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint,title='QLU教室查询')
 
 
-
-
-
-@app.route("/get")
-def get():
-    #data["url"] = request.url
-    # get方法获取到的参数
-    #name = request.args.get('name','zhangsan')
-
-    #request.args
-    #data["remote_addr"] = request.remote_addr
-
-    return render_template("index.html")
     
 @app.route("/api/data", methods=["POST"])
 def api():
@@ -171,6 +158,13 @@ def api():
     available_room=query_room(weeks,week_i,course_i)
     # print(available_room)
     # 查询完后时间信息进行处理显示
+    ip = request.headers.get('CF-Connecting-IP')
+    host = request.headers.get('Host')
+    if host != 'classroom.matt-wang.me':
+        ip = request.remote_addr
+
+    logger.warning(ip+' '+dic_form['weeks']+' '+dic_form['week_i']+' '+str(course_i))
+
     if is_today:
          today= '今天'
          weeks,week_i='',''
@@ -188,64 +182,6 @@ def api():
     # dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room
     res = jsonify({'status': 'success', 'available_room': available_room,'weeks':weeks,'week_i':week_i,'course_i':course_i,'today':today,'hint':'查询成功'})
     return res, 200, {"Content-Type":"application/json"}
-
-@app.route("/post", methods=["POST"])
-def post():
-    dt, hm = get_time()
-    is_today =1
-
-    # 获取当前周数和星期
-    weeks,week_i=school_schedule()
-    weeks,week_i=str(weeks),str(week_i)
-    available_room=['没有可用的教室，运气爆棚，hahaha!']
-
-    # 捕获收到的表单
-    dic_form= request.form
-    course_i = request.form.getlist('test[]')
-    bro_agent=request.user_agent
-    # print('%s %s\n从%s\n收到的表单为：\n'%(dt, hm,bro_agent),dic_form,course_i,'\n')
-    ip = request.headers.get('CF-Connecting-IP')
-    host = request.headers.get('Host')
-    if host != 'classroom.matt-wang.me':
-        ip = request.remote_addr
-    logger.warning(ip+' '+dic_form['weeks']+' '+dic_form['week_i']+' '+str(course_i))
-
-    # 判断是否为今天
-    if dic_form['weeks']:
-        weeks=dic_form['weeks']
-        is_today = 0
-    if dic_form['week_i']:
-        week_i=dic_form['week_i']
-        is_today = 0
-
-
-
-    available_room=query_room(weeks,week_i,course_i)
-    # 查询完后时间信息进行处理显示
-    if is_today:
-         today= '今天'
-         weeks,week_i='',''
-    else:
-        today=''
-        weeks='第'+weeks+'周'
-        week_i='星期'+week_i
-
-
-
-    co = "".join((lambda x: (x.sort(), x)[1])(course_i))
-    course_i='第'
-    for i in co:
-        course_i=course_i+str(int(i)*2-1)+('' if int(i)*2==12 else str(int(i)*2))+','
-    course_i=course_i[:-1]+'节课'
-
-    # 获取时间和图书馆座位信息
-    dt, hm, av_seat_list, un_seat_list,seat_sign=get_lib_seat()
-    if len(av_seat_list) == 0:
-        av_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
-    if len(un_seat_list) == 0:
-        un_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
-
-    return render_template("result.html",dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,title='空教室查询结果')
 
 @app.route("/get_pv")
 def get_pv():
@@ -362,40 +298,8 @@ def ip_get_location(ip_address):
     # print(u'  [+] 经度 :           ' + str(Location_Longitude))
     # print('===============End======================')
     return Country_IsoCode,City_Name
-# 检验和处理ip地址
-def seperate_ip(ip_address):
-    ip_match = r"^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|0?[0-9]?[1-9]|0?[1-9]0)\.)(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-4]|2[0-4][0-9]|1[0-9][0-9]|0?[0-9]?[1-9]|0?[1-9]0)$"
-    ip_match_list = r"^(?:(?:25[0-5]|2[0-4][0-9]|1[0-9][0-9]|0?[0-9]?[1-9]|0?[1-9]0)\.)(?:(25[0-5]|2[0-4][0-9]|[01]?[0-9][0-9]?)\.){2}(?:25[0-4]|2[0-4][0-9]|1[0-9][0-9]|0?[0-9]?[1-9])-(?:25[0-4]|2[0-4][0-9]|1[0-9][0-9]|0?[0-9]?[1-9]|0?[1-9]0)$"
 
-    if re.match(ip_match, ip_address):
-        try:
-            ip_get_location(ip_address)
-        except Exception as e:
-            print(e)
-    elif re.match(ip_match_list, ip_address):
-        ip_start =  ip_address.split('-')[0].split('.')[3]
-        ip_end = ip_address.split('-')[1]
-        # 如果ip地址范围一样，则直接执行
-        if(ip_start == ip_end):
-            try:
-                seperate_ip(ip_address.split('-')[0])
-            except Exception as e:
-                print(e)
-        elif ip_start > ip_end:
-            print('the value of ip, that you input, has been wrong! try again!')
-            exit(0)
-        else:
-            ip_num_list =  ip_address.split('-')[0].split('.')
-            ip_num_list.pop()
-            for ip_last in range(int(ip_start), int(ip_end)+1):
-                ip_add = '.'.join(ip_num_list)+'.'+str(ip_last)
-                try:
-                    ip_get_location(ip_add)
-                except Exception as e:
-                    print(e)
-    else:
-        print('Wrong type of ip address!')
-        print('100.8.11.58  100.8.11.58-100  alike!')
+
         
 if __name__ == '__main__':
     server = pywsgi.WSGIServer(('0.0.0.0',5000),app)

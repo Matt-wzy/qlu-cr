@@ -1,7 +1,3 @@
-
-// 获取按钮、复选框和输入框元素
-const submitBtn = document.getElementById('submit-btn');
-
 const resetBtn = document.getElementById('reset-btn');
 const checkboxs = document.getElementsByClassName('test');
 // const hint = document.getElementById('hint');
@@ -43,11 +39,14 @@ const postData = async (url, data) => {
 
 const submitButton = document.getElementById('key');
 submitButton.addEventListener('click', async () => {
+    // const submitButton = document.getElementById('key');
       // 如果已经在查询中，则不执行
     if (isQuerying) {
         return;}
+    const buttninner = submitButton.innerText;
     // 将标志设置为真
     isQuerying = true;
+    submitButton.innerText = '查询中...';
     const input1 = document.getElementById('weeks');
     const input2 = document.getElementById('week_i');
     var sap = '';
@@ -65,6 +64,7 @@ submitButton.addEventListener('click', async () => {
   };
   const responseData = await postData('/api/data', data);
   isQuerying = false;
+  submitButton.innerText = buttninner;
   if (responseData) {
     
     const available_rooms = responseData.available_room;
