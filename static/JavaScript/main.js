@@ -8,7 +8,7 @@ const checkboxs = document.getElementsByClassName('test');
 // const resultContainer = document.getElementById('result-container');
 // const tittle = document.getElementById('tittle');
 let responseData = null; // 用于保存返回的数据
-
+var isQuerying = false;
 
 
 
@@ -43,6 +43,11 @@ const postData = async (url, data) => {
 
 const submitButton = document.getElementById('key');
 submitButton.addEventListener('click', async () => {
+      // 如果已经在查询中，则不执行
+    if (isQuerying) {
+        return;}
+    // 将标志设置为真
+    isQuerying = true;
     const input1 = document.getElementById('weeks');
     const input2 = document.getElementById('week_i');
     var sap = '';
@@ -59,7 +64,9 @@ submitButton.addEventListener('click', async () => {
     test: relocation,
   };
   const responseData = await postData('/api/data', data);
+  
   if (responseData) {
+    isQuerying = false;
     const available_rooms = responseData.available_room;
     const resultElement = document.getElementById('result');
     const weeks = document.getElementById('wek');
