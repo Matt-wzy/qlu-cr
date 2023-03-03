@@ -2,9 +2,11 @@
 from collections import Counter
 from flask import (
     Flask,
+    redirect,
     render_template,
     request,
     jsonify,
+    url_for,
 )
 
 from concurrent.futures import ThreadPoolExecutor
@@ -182,6 +184,12 @@ def api():
     # dt=dt, hm=hm,weeks=weeks,week_i=week_i,course_i=course_i,today=today, available_room=available_room
     res = jsonify({'status': 'success', 'available_room': available_room,'weeks':weeks,'week_i':week_i,'course_i':course_i,'today':today,'hint':'查询成功'})
     return res, 200, {"Content-Type":"application/json"}
+
+@app.route('/post', methods=['GET', 'POST'])
+def get_f():
+    # redict to index.html
+    url=url_for('index')
+    return redirect(url)
 
 @app.route("/get_pv")
 def get_pv():
