@@ -19,7 +19,7 @@
     "display":"standalone",
     "dir":"ltr",
     "orientation":"portrait",
-    "start_url":"/?utm_source=superpwa",
+    "start_url":"/",
     "scope":"/",
     "shortcuts":[
     {
