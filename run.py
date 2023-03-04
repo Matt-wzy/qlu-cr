@@ -1,12 +1,15 @@
 
 from collections import Counter
+import time
 from flask import (
     Flask,
     redirect,
     render_template,
     request,
     jsonify,
+    send_from_directory,
     url_for,
+    make_response,
 )
 
 from concurrent.futures import ThreadPoolExecutor
@@ -127,11 +130,33 @@ def index():
     except:
         pass
     # logger.warning(ip)
+    res = render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint,title='QLU教室查询')
+    return res
 
-    return render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint,title='QLU教室查询')
-
-
+@app.route("/serviceworker.js")
+def sw():
+    response = make_response(send_from_directory(path = 'serviceworker.js',directory='./static/JavaScript') )
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
     
+@app.route("/sw.js")
+def sw2():
+    response = make_response(send_from_directory(path = 'sw.js',directory='./static/JavaScript') )
+    response.headers['Content-Type'] = 'application/javascript'
+    response.headers['Service-Worker-Allowed'] = '/'
+    return response
+
+@app.route("/manifest.webmanifest")
+def manifest():
+    response = make_response(send_from_directory(path = 'manifest.webmanifest',directory='./static') )
+    response.headers['Content-Type'] = 'application/manifest+json'
+    return response
+
+@app.route("/offline.html")
+def offline():
+    return render_template("offline.html",time = time.strftime("%Y-%m-%d %H:%M:%S", time.localtime()))
+
 @app.route("/api/data", methods=["POST"])
 def api():
     dt, hm = get_time()
