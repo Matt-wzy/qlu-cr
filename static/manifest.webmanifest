@@ -8,8 +8,8 @@
     "orientation": "portrait-primary",
     "theme_color": "#5eace0",
     "icons": [{
-        "src": "/static/img/QLUT.ico",
+        "src": "https://www.qlu.edu.cn/_upload/tpl/09/ea/2538/template2538/favicon.ico",
         "sizes": "32x32",
-        "type": "image/png"
+        "type": "image/x-icon"
     }]
 }
