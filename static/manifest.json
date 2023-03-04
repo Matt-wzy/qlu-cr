@@ -1,0 +1,37 @@
+{
+    "name":"QLU空座查询",
+    "short_name":"查空座",
+    "description":"可用于齐鲁工业大学（山东省科学院） （长清校区）的空座查询工具，纯web端，没有应用，无广告，快速便捷",
+    "icons":[
+    {
+    "src":"https://cdn-p.freejishu.com/img/2023/03/04/2VT6.png",
+    "sizes":"512x512",
+    "type":"image/png"
+    },
+    {
+    "src":"https://img.freejishu.com/img/2023/03/04/2VT6.th.png",
+    "sizes":"160x160",
+    "type":"image/png"
+    }
+    ],
+    "background_color":"#D5E0EB",
+    "theme_color":"#D5E0EB",
+    "display":"standalone",
+    "dir":"ltr",
+    "orientation":"portrait",
+    "start_url":"/",
+    "scope":"/",
+    "shortcuts":[
+    {
+    "name":"空教室查询",
+    "url":"",
+    "description":"由Matt-wang基于开源代码改写的适用于齐鲁工业大学的空教室查询工具",
+    "icons":[
+    {
+    "src":"https://img.freejishu.com/img/2023/03/04/2VT6.th.png",
+    "sizes":"160x160"
+    }
+    ]
+    }
+    ]
+    }

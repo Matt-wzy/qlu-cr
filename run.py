@@ -147,10 +147,10 @@ def sw2():
     response.headers['Service-Worker-Allowed'] = '/'
     return response
 
-@app.route("/manifest.webmanifest")
+@app.route("/manifest.json")
 def manifest():
-    response = make_response(send_from_directory(path = 'manifest.webmanifest',directory='./static') )
-    response.headers['Content-Type'] = 'application/manifest+json'
+    response = make_response(send_from_directory(path = 'manifest.json',directory='./static') )
+    response.headers['Content-Type'] = 'application/json'
     return response
 
 @app.route("/offline.html")
