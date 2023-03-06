@@ -116,11 +116,16 @@ def index():
     if Proto == 'http':
         hint += "你知道么？其实我们支持https访问哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> 。<br>"
     host = request.headers.get('Host')
+    ua = request.headers.get('User-Agent')
+
     if host != 'classroom.matt-wang.me':
         hint += "你知道么？我们的域名是classroom.matt-wang.me哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> .  此链接可以支持校外网络访问哦~"
         ip = request.remote_addr
     with open("./static/data/userip.json", "a") as f:
         f.write('\n'+dt+"--"+hm+"--"+ip)
+    if ua.find('MicroMessenger') != -1:
+        hint += "亲，这边建议您不要使用微信直接点击链接访问本站哦，复制链接到浏览器访问性能更好呦~   https://classroom.matt-wang.me 。<br>"
+        logger.warning('微信访问'+ip)
     try:
         with open("./static/data/frequent.json", "r") as f:
             ip_list = f.readlines()
