@@ -55,7 +55,7 @@ const postData = async (url, data) => {
     setTimeout(() => {
       retryButton.style.display = 'none';
       errorElement.style.display = 'none';
-    }, 1000);
+    }, 10000);
     return null;
   }
 }

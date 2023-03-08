@@ -135,7 +135,7 @@ def index():
     except:
         pass
     # logger.warning(ip)
-    res = render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,dt=dt,hm=hm ,av_seat_list=av_seat_list,un_seat_list=un_seat_list,seat_sign=seat_sign,visit_people=mancount,hint_a = hint,title='QLU教室查询')
+    res = render_template("index.html",exam_day=exam_day,weeks=weeks,week_i=week_i,seat_sign=seat_sign,visit_people=mancount,hint_a = hint,title='QLU教室查询')
     return res
 
 @app.route("/serviceworker.js")
