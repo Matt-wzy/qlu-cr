@@ -11,3 +11,4 @@ userip.json
 *.pkl
 *test*
 *.mmdb
+frequent.json
