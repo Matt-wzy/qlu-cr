@@ -85,7 +85,7 @@ submitButton.addEventListener('click', async () => {
     week_i: input2.value,
     test: relocation,
   };
-  const responseData = await postData('/api/data', data);
+  const responseData = await postData('http://47.115.221.159:8080/api/data', data);
   isQuerying = false;
   submitButton.innerText = buttninner;
   if (responseData) {
