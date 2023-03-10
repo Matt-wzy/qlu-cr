@@ -76,16 +76,34 @@ submitButton.addEventListener('click', async () => {
     if (input1.value != '') {
         if (isNaN(input1.value)) {
             alert('周数必须为数字');
+            isQuerying = false;
+            submitButton.innerText = buttninner;
             return;
         }
     }
     if (input2.value != '') {
         if (isNaN(input2.value)) {
             alert('星期必须为数字');
+            isQuerying = false;
+            submitButton.innerText = buttninner;
             return;
         }
     }
-    
+    // 判断所有复选框是否都未选中，若都未选中则提示用户至少选择一个
+    var count = 0;
+    for (var i = 0; i < checkboxs.length; i++) {
+        if (checkboxs[i].checked) {
+            count++;
+        }
+    }
+    if (count == 0) {
+        alert('请至少选择一个');
+        isQuerying = false;
+        submitButton.innerText = buttninner;
+        return;
+    }
+
+
     var sap = '';
     var relocation = '';
     $( ".test" ).each(function() {
