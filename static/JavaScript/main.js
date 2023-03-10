@@ -72,6 +72,20 @@ submitButton.addEventListener('click', async () => {
     submitButton.innerText = '查询中...';
     const input1 = document.getElementById('weeks');
     const input2 = document.getElementById('week_i');
+    // 判断是否为空,若不为空则判断是否为数字，为空则继续
+    if (input1.value != '') {
+        if (isNaN(input1.value)) {
+            alert('周数必须为数字');
+            return;
+        }
+    }
+    if (input2.value != '') {
+        if (isNaN(input2.value)) {
+            alert('星期必须为数字');
+            return;
+        }
+    }
+    
     var sap = '';
     var relocation = '';
     $( ".test" ).each(function() {
