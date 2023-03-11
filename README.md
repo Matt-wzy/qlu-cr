@@ -1,6 +1,6 @@
 # qlu-cr
  查询校内空教室
-> [demo 地址](https://classroom.matt-wang.me/)
+> [demo 地址](https://classroom.matt-wang.me/)   欢迎捐赠服务器或自行根据现有代码搭建服务以提升用户体验
 
 能力有限，欢迎issue和pull😊
 
