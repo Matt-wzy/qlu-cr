@@ -23,6 +23,7 @@ from gevent import pywsgi
 # log
 import logging
 import geoip2.database
+from flask_cors import CORS
 reader = geoip2.database.Reader('GeoLite2-City.mmdb')
 logging.basicConfig(level=logging.WARNING, format='%(asctime)s - %(message)s',filename='run.log')
 logger = logging.getLogger(__name__)
@@ -79,6 +80,7 @@ def count_pv(dt,hm):
 
 
 app = Flask(__name__)
+CORS(app)
 
 @app.route("/")
 def index():
