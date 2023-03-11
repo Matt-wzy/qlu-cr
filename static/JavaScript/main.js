@@ -21,16 +21,123 @@ const registerServiceWorker = async () => {
 registerServiceWorker();
 
 
-const resetBtn = document.getElementById('reset-btn');
-const checkboxs = document.getElementsByClassName('test');
-// const hint = document.getElementById('hint');
-// const resultContainer = document.getElementById('result-container');
-// const tittle = document.getElementById('tittle');
-let responseData = null; // 用于保存返回的数据
-var isQuerying = false;
+// 定义常量
+const submitButton = document.getElementById('submit-button');
+const resetButton = document.getElementById('reset-button');
+const checkboxes = Array.from(document.querySelectorAll('.test'));
+let responseData = null;
+let isQuerying = false;
 
+// 定义一个元素ID数组
+const elementIds = ['hint', 'result-container', 'title'];
 
+// 将元素ID批量声明为常量
+const [hint, resultContainer, title] = elementIds.map(id => document.getElementById(id));
 
+// 批量控制元素显示和隐藏的函数
+const toggleDisplay = (elements, displayStyle) => {
+  elements.forEach(element => {
+    element.style.display = displayStyle;
+  });
+}
+
+// 提交表单事件监听
+submitButton.addEventListener('click', async () => {
+  await submitForm();
+});
+
+// 重置表单事件监听
+resetButton.addEventListener('click', () => {
+  resetForm();
+});
+
+// 提交表单函数
+const submitForm = async () => {
+  // 如果正在查询中，直接返回
+  if (isQuerying) {
+    return;
+  }
+  // 禁止再次提交
+  isQuerying = true;
+  submitButton.innerText = '查询中...';
+  // 获取表单数据
+  const weeksInput = document.getElementById('weeks');
+  const weekIInput = document.getElementById('week_i');
+  if (weeksInput.value && isNaN(weeksInput.value)) {
+    alert('周数必须为数字');
+    isQuerying = false;
+    submitButton.innerText = '提交';
+    return;
+  }
+  if (weekIInput.value && isNaN(weekIInput.value)) {
+    alert('星期必须为数字');
+    isQuerying = false;
+    submitButton.innerText = '提交';
+    return;
+  }
+  let test = [];
+  checkboxes.forEach(checkbox => {
+    if (checkbox.checked) {
+      test.push(checkbox.value);
+    }
+  });
+  if (test.length === 0) {
+    alert('请至少选择一个');
+    isQuerying = false;
+    submitButton.innerText = '提交';
+    return;
+  }
+  const data = {
+    weeks: weeksInput.value,
+    week_i: weekIInput.value,
+    test: test.join(','),
+  };
+  // 发送API请求
+  responseData = await postData('/api/data', data);
+  // 恢复按钮状态
+  isQuerying = false;
+  submitButton.innerText = '提交';
+  // 处理API响应
+  if (responseData) {
+    const availableRooms = responseData.available_room;
+    const resultElement = document.getElementById('result');
+    const weeksElement = document.getElementById('wek');
+    resultElement.innerHTML = '';
+    weeksElement.innerHTML = responseData.weeks + ' ' + responseData.week_i + ' ' + responseData.today + '<br>' + responseData.course_i;
+    availableRooms.forEach(item => {
+      const li = document.createElement('li');
+      li.innerHTML = item;
+      resultElement.appendChild(li);
+    });
+    checkboxes.forEach(checkbox => {
+      checkbox.checked = false;
+    });
+    // 批量显示元素
+    toggleDisplay([resultContainer, resetButton], 'block');
+    // 批量隐藏元素
+    toggleDisplay([hint, title], 'none');
+    weeksInput.value = '';
+    weekIInput.value = '';
+    resetButton.style.margin = '0 auto';
+
+  }
+};
+
+// 重置表单函数
+const resetForm = () => {
+  const resultElement = document.getElementById('result');
+  resultElement.innerHTML = '';
+  checkboxes.forEach(checkbox => {
+    checkbox.checked = false;
+  });
+  responseData = null;
+  // 批量隐藏元素
+  toggleDisplay([resultContainer, resetButton], 'none');
+  // 批量显示元素
+  toggleDisplay([hint, title], 'block');
+};
+
+// 发送POST请求函数
 const postData = async (url, data) => {
   try {
     const response = await fetch(url, {
@@ -58,114 +165,12 @@ const postData = async (url, data) => {
     }, 1000);
     return null;
   }
-}
+};
 
-const submitButton = document.getElementById('key');
-submitButton.addEventListener('click', async () => {
-    // const submitButton = document.getElementById('key');
-      // 如果已经在查询中，则不执行
-    if (isQuerying) {
-        return;}
-    const buttninner = submitButton.innerText;
-    // 将标志设置为真
-    isQuerying = true;
-    submitButton.innerText = '查询中...';
-    const input1 = document.getElementById('weeks');
-    const input2 = document.getElementById('week_i');
-    // 判断是否为空,若不为空则判断是否为数字，为空则继续
-    if (input1.value != '') {
-        if (isNaN(input1.value)) {
-            alert('周数必须为数字');
-            isQuerying = false;
-            submitButton.innerText = buttninner;
-            return;
-        }
-    }
-    if (input2.value != '') {
-        if (isNaN(input2.value)) {
-            alert('星期必须为数字');
-            isQuerying = false;
-            submitButton.innerText = buttninner;
-            return;
-        }
-    }
-    // 判断所有复选框是否都未选中，若都未选中则提示用户至少选择一个
-    var count = 0;
-    for (var i = 0; i < checkboxs.length; i++) {
-        if (checkboxs[i].checked) {
-            count++;
-        }
-    }
-    if (count == 0) {
-        alert('请至少选择一个');
-        isQuerying = false;
-        submitButton.innerText = buttninner;
-        return;
-    }
-
-
-    var sap = '';
-    var relocation = '';
-    $( ".test" ).each(function() {
-        if($( this ).is(':checked')){
-            relocation = relocation+''+sap+''+$( this ).val();
-            sap = ',';
-        }
-    });
-  const data = {
-    weeks: input1.value,
-    week_i: input2.value,
-    test: relocation,
-  };
-  const responseData = await postData('/api/data', data);
-  isQuerying = false;
-  submitButton.innerText = buttninner;
-  if (responseData) {
-    
-    const available_rooms = responseData.available_room;
-    const resultElement = document.getElementById('result');
-    const weeks = document.getElementById('wek');
-    resultElement.innerHTML = '';
-    weeks.innerHTML = responseData.weeks+' '+responseData.week_i+' '+responseData.today+'<br>'+responseData.course_i;
-    available_rooms.forEach(item => {
-        const li = document.createElement('li');
-        li.innerHTML = item;
-        resultElement.appendChild(li);
-    });
-    for (var i = 0; i < checkboxs.length; i++) {
-      checkboxs[i].checked = false;
-  }
-    const hint = document.getElementById('hint');
-    const resultContainer = document.getElementById('result-container');
-    const tittle = document.getElementById('tittle');
-    input1.value = '';
-    input2.value = '';
-    resultContainer.style.display = 'block';
-    resetBtn.style.display = 'block';
-    resetBtn.style.margin = '0 auto';
-    hint.style.display = 'none';
-    tittle.style.display = 'none';
-  }
-});
-
-const useResponseData = () => {
-  const responseData = window.responseData;
-  if (responseData) {
-    const timeElement = document.getElementById('time');
-    timeElement.innerHTML = 'Time: ' + responseData.time;
-  } else {
-    console.error('Response data is null');
-  }
-}
-
-// window.addEventListener('load', () => {
-//   setInterval(() => {
-//     postData('/api/heartbeat', {});
-//   }, 5000);
-// });
-
-const retryButton = document.getElementById('retry');
+// 重试按钮事件监听
+const retryButton = document.getElementById('retry-button');
 retryButton.addEventListener('click', async () => {
+  isQuerying = false;
   const checkbox = document.getElementById('checkbox');
   const input = document.getElementById('input');
   const data = {
@@ -187,25 +192,5 @@ retryButton.addEventListener('click', async () => {
 });
 
 
-// 绑定重置按钮点击事件
-resetBtn.addEventListener('click', () => {
-    // 删除所有li标签
-    const result = document.getElementById('result');
-    result.innerHTML = '';
 
-    // get all checkbox
-    for (var i = 0; i < checkboxs.length; i++) {
-        checkboxs[i].checked = false;
-    }
-  
-    // 重置返回的数据
-    responseData = null;
-    const hint = document.getElementById('hint');
-    const resultContainer = document.getElementById('result-container');
-    const tittle = document.getElementById('tittle');
-    // 隐藏结果和重置按钮
-    resultContainer.style.display = 'none';
-    resetBtn.style.display = 'none';
-    hint.style.display = 'block';
-    tittle.style.display = 'block';
-  });
+
