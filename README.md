@@ -1,6 +1,6 @@
 # qlu-cr
  查询校内空教室
-> [demo 地址](https://classroom.matt-wang.me/)   欢迎捐赠服务器或自行根据现有代码搭建服务以提升用户体验
+> [demo 地址](https://classroom.matt-wang.me/)   欢迎捐赠服务器或自行根据现有代码搭建服务以提升用户体验，当前使用cloudflare tunnel内网穿透功能以使校内服务器可以被校外访问。
 
 能力有限，欢迎issue和pull😊
 
