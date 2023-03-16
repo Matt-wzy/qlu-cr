@@ -109,16 +109,16 @@ const resetForm = () => {
     const resultElement = document.getElementById('result');
     resultElement.innerHTML = '';
     checkboxes.forEach(checkbox => {
-      checkbox.classList.remove('is-active')
-      checkbox.classList.remove('is-link');
+        checkbox.classList.remove('is-active')
+        checkbox.classList.remove('is-link');
     });
     responseData = null;
     // 批量隐藏元素
     toggleDisplay([resultContainer], 'none');
     // 批量显示元素
     toggleDisplay([reqbox],'block');
-  };
-  
+};
+
 // 发送POST请求函数
 const postData = async (url, data) => {
     try {
@@ -149,3 +149,76 @@ const postData = async (url, data) => {
         return null;
     }
 };
+
+// lib
+let isFetchingData = false; // 标志变量，指示当前是否正在获取数据
+let avSeats = null;
+let unSeats = null;
+let dt = null;
+let hm = null;
+let mancount = null;
+const mancountElement = document.getElementById('man');
+const avSeatsElement = document.getElementById('lib_av');
+const unSeatsElement = document.getElementById('lib_un');
+// const dtElement = document.getElementById('dt');
+// const hmElement = document.getElementById('hm');
+
+function getData() {
+    if (isFetchingData) {
+        console.log('上一个请求仍在处理，请稍后再试');
+        return;
+    }
+
+    isFetchingData = true;
+
+    fetch('/apt/libseat')
+        .then(response => response.json())
+        .then(data => {
+            avSeats = data.av_seats;
+            unSeats = data.un_seats;
+            dt = data.dt;
+            hm = data.hm;
+            mancount = data.mancount;
+            console.log(avSeats);
+            console.log(unSeats);
+            mancountElement.innerText = mancount;
+            avSeatsElement.innerText = '';
+            avSeats.forEach((area) => {
+                const row = document.createElement('tr');
+                const areaName = document.createElement('td');
+                const availableSpace = document.createElement('td');
+                areaName.innerText = area.area_name;
+                availableSpace.innerText = area.available_num;
+                row.appendChild(areaName);
+                row.appendChild(availableSpace);
+                avSeatsElement.appendChild(row);
+            });
+            unSeatsElement.innerText = '';
+            unSeats.forEach((area) => {
+                const row = document.createElement('tr');
+                const areaName = document.createElement('td');
+                const availableSpace = document.createElement('td');
+                areaName.innerText = area.area_name;
+                availableSpace.innerText = area.available_num;
+                row.appendChild(areaName);
+                row.appendChild(availableSpace);
+                unSeatsElement.appendChild(row);
+            });
+
+
+
+
+            console.log(avSeats); // 打印 "av_seats" 属性的值
+            isFetchingData = false; // 请求完成，重置标志变量
+
+        })
+        .catch(error => {
+            console.error(error);
+            isFetchingData = false; // 请求失败，重置标志变量
+        });
+
+}
+
+getData();
+// 每隔15秒请求一次数据
+setInterval(getData, 15000);
