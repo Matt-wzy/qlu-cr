@@ -45,7 +45,7 @@ def get_lib_seat():
     return dt, hm,av_seat_list,un_seat_list,seat_sign
 
 
-def count_pv(dt,hm,add = True):
+def count_pv(dt,hm,adddd = True):
     if os.path.exists("./static/data/pv.json") == False:
         with open("./static/data/pv.json", "w") as f:
             f.write(dt+' '+hm+' 1')
@@ -58,8 +58,10 @@ def count_pv(dt,hm,add = True):
         elif pv[2] == '':
             mancount = 1
         else:
-            if add :
-                mancount=int(pv[2])+1   
+            if adddd :
+                mancount=int(pv[2])+1
+            else:
+                mancount = int(pv[2])   
         if pv[0]==dt:
             pass
         else:
