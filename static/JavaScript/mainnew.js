@@ -178,9 +178,7 @@ function getData() {
             unSeats = data.un_seats;
             dt = data.dt;
             hm = data.hm;
-            mancount = data.mancount;
-            console.log(avSeats);
-            console.log(unSeats);
+            mancount = data.visitcount;
             mancountElement.innerText = mancount;
             avSeatsElement.innerText = '';
             avSeats.forEach((area) => {
@@ -205,10 +203,6 @@ function getData() {
                 unSeatsElement.appendChild(row);
             });
 
-
-
-
-            console.log(avSeats); // 打印 "av_seats" 属性的值
             isFetchingData = false; // 请求完成，重置标志变量
 
         })
