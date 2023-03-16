@@ -233,6 +233,9 @@ def get_pv():
 @app.route("/status")
 def get_status():
     return "Good"
+@app.route("/new")
+def new():
+    return render_template("new.html")
 
 def refresh_frequent():
     with open('./static/data/userip.json', 'r') as f:
