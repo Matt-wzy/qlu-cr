@@ -217,6 +217,19 @@ def api():
     res = jsonify({'status': 'success', 'available_room': available_room,'weeks':weeks,'week_i':week_i,'course_i':course_i,'today':today,'hint':'查询成功'})
     return res, 200, {"Content-Type":"application/json"}
 
+@app.route('/api/libseat',methods=['GET','POST'])
+def libseat():
+    dt, hm, av_seat_list, un_seat_list,seat_sign=get_lib_seat()
+    mancount = count_pv(dt, hm)
+    if len(av_seat_list) == 0:
+        av_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
+    if len(un_seat_list) == 0:
+        un_seat_list = [{ 'area_name': '---', 'available_num': '---'}]
+
+    res = jsonify({'status': 'success', 'av_seats': av_seat_list,'un_seats':un_seat_list,'dt':dt,'hm':hm,'visitcount':mancount,'hint':'查询成功'})
+    return res, 200, {"Content-Type":"application/json"}
+
+
 @app.route('/post', methods=['GET', 'POST'])
 def get_f():
     # redict to index.html
