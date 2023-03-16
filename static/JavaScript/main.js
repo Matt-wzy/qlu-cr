@@ -153,6 +153,7 @@ const postData = async (url, data) => {
     const json = await response.json();
     return json;
   } catch (error) {
+    isQuerying = false;
     console.error('Error:', error);
     const errorElement = document.getElementById('error');
     errorElement.innerHTML = 'Error: ' + error.message;
