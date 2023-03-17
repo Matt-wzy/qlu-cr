@@ -260,6 +260,49 @@ def jump():
 
 @app.route("/new/<dark>")
 def new(dark):
+    hint = ""
+    dt, hm = get_time()
+    ip = request.headers.get('CF-Connecting-IP')
+    Proto = request.headers.get('X-Forwarded-Proto')
+    regoin = None
+
+    try:
+        regoin,city = ip_get_location(str(ip))
+    except Exception as e:
+        pass
+    if regoin == 'CN' or regoin == 'None':
+        if (city == 'Jinan') or (city == 'None') :
+            pass
+        else:
+            hint += "oops,我们是齐鲁工业大学（长清校区）的空教室查询工具，如果您需要查询你们大学的空教室的话，可以参考下方的github仓库自行部署 。<br>"
+    elif regoin is None:
+        pass
+    else:
+        hint += "尽管内网穿透服务提供商是cloudflare，但是我们还是建议您使用直连的方式访问本站哦~（超小声）直连其实更快的<br>"\
+
+    if Proto == 'http':
+        hint += "你知道么？其实我们支持https访问哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> 。<br>"
+    host = request.headers.get('Host')
+    ua = request.headers.get('User-Agent')
+
+    if host != 'classroom.matt-wang.me':
+        hint += "你知道么？我们的域名是classroom.matt-wang.me哦！ <a href = 'https://classroom.matt-wang.me'>点我跳转</a> .  此链接可以支持校外网络访问哦~"
+        ip = request.remote_addr
+    with open("./static/data/userip.json", "a") as f:
+        f.write('\n'+dt+"--"+hm+"--"+ip)
+    if ua.find('MicroMessenger') != -1:
+        hint += "亲，这边建议您不要使用微信直接点击链接访问本站哦，复制链接到浏览器访问性能更好呦~   https://classroom.matt-wang.me 。<br>"
+        logger.warning('微信访问'+ip)
+    try:
+        with open("./static/data/frequent.json", "r") as f:
+            ip_list = f.readlines()
+            ip_list = [x.strip() for x in ip_list]
+            if ip in ip_list:
+                hint+= "<br>是老朋友啊！如果觉得好用的话欢迎推荐给朋友哦~"
+    except:
+        pass
+
+    count_pv(dt,hm)
     weeks,week_i=school_schedule()
     if dark == 'dark':
         return render_template("new.html",dark=dark,def_week=weeks,def_day=week_i)

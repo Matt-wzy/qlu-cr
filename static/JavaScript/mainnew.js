@@ -3,9 +3,9 @@
 const submitButton = document.getElementById('submit-button');
 const resetButton = document.getElementById('reset-button');
 // 定义一个元素ID数组
-const elementIds = ['hint', 'result-container', 'title','reqbox'];
+const elementIds = ['hint', 'result-container', 'title', 'reqbox'];
 // 将元素ID批量声明为常量
-const [hint, resultContainer, title,reqbox] = elementIds.map(id => document.getElementById(id));
+const [hint, resultContainer, title, reqbox] = elementIds.map(id => document.getElementById(id));
 
 const checkboxes = Array.from(document.querySelectorAll('.classbtn'));
 let responseData = null;
@@ -97,7 +97,7 @@ const submitForm = async () => {
         toggleDisplay([resultContainer], 'flex');
         // 批量隐藏元素
         // toggleDisplay([hint, title], 'none');
-        toggleDisplay([reqbox],'none');
+        toggleDisplay([reqbox], 'none');
         weeksInput.value = '';
         weekIInput.value = '';
 
@@ -116,7 +116,7 @@ const resetForm = () => {
     // 批量隐藏元素
     toggleDisplay([resultContainer], 'none');
     // 批量显示元素
-    toggleDisplay([reqbox],'flex');
+    toggleDisplay([reqbox], 'flex');
 };
 
 // 发送POST请求函数
@@ -216,3 +216,6 @@ function getData() {
 getData();
 // 每隔15秒请求一次数据
 setInterval(getData, 15000);
+if (location.protocol !== 'https:' && location.hostname !== 'localhost') {
+    location.replace(`https:${location.href.substring(location.protocol.length)}`);
+}

@@ -42,7 +42,7 @@
 
 
     <meta charset="UTF-8">
-    <title>QLU空教室查询</title>
+    <title>QLU空教室查询Beta</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     {% if dark == "dark" %}
     <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/darkly/bulmaswatch.min.css">
@@ -175,8 +175,13 @@
         .search-button {}
     </style>
 </head>
-
+{% if dark == "dark" %}
 <body>
+{% else %}
+<body class="has-background-light">
+{% endif %}
+
+
     <nav class="navbar is-fixed-top" role="navigation" aria-label="main navigation">
         <div class="navbar-brand">
             <a class="navbar-item" href="#">
@@ -256,6 +261,7 @@
                 <button id="retry-button" style="display: none;">重试</button>
 
                 <div id="reqbox" class="box">
+                    <p>当前第{{def_week}}周</p>
                     <div class="inputs is-centered">
                         <div class="input-group">
                             <div class="label">周数：</div>
@@ -347,7 +353,7 @@
                 target="_blank">点我直达</a><br>如需联系&amp;bug反馈&amp;杂聊&amp;技术支持，请联系 matt@matt-wang.me，我看到后将会以私人邮箱回复
         </div>
     </footer>
-    <script src="./static/JavaScript/mainnew.js"></script>
+    <script src="../static/JavaScript/mainnew.js"></script>
 </body>
 
 </html>
