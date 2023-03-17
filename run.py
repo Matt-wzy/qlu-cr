@@ -86,6 +86,10 @@ app = Flask(__name__)
 CORS(app)
 
 @app.route("/")
+def newindex():
+    return redirect(url_for('new',dark='light'))
+
+@app.route("/old")
 def index():
     hint = ''
     weeks,week_i=school_schedule()
@@ -249,9 +253,18 @@ def get_pv():
 @app.route("/status")
 def get_status():
     return "Good"
+
 @app.route("/new")
-def new():
-    return render_template("new.html")
+def jump():
+    return redirect("/new/light")
+
+@app.route("/new/<dark>")
+def new(dark):
+    weeks,week_i=school_schedule()
+    if dark == 'dark':
+        return render_template("new.html",dark=dark,def_week=weeks,def_day=week_i)
+    else:
+        return render_template("new.html",def_week=weeks,def_day=week_i)
 
 def refresh_frequent():
     with open('./static/data/userip.json', 'r') as f:
