@@ -94,7 +94,7 @@ const submitForm = async () => {
             checkbox.classList.remove('is-link');
         });
         // 批量显示元素
-        toggleDisplay([resultContainer], 'block');
+        toggleDisplay([resultContainer], 'flex');
         // 批量隐藏元素
         // toggleDisplay([hint, title], 'none');
         toggleDisplay([reqbox],'none');
@@ -116,7 +116,7 @@ const resetForm = () => {
     // 批量隐藏元素
     toggleDisplay([resultContainer], 'none');
     // 批量显示元素
-    toggleDisplay([reqbox],'block');
+    toggleDisplay([reqbox],'flex');
 };
 
 // 发送POST请求函数

@@ -83,7 +83,7 @@
 
         .block1 {
             display: flex;
-            flex-direction: column;
+            /* flex-direction: column; */
             align-items: center;
 
             /* height: 100vh; */
@@ -93,8 +93,8 @@
             display: flex;
             flex-direction: column;
             align-items: center;
-            width: 100%;
-            height: 100%;
+            /* width: 100%;
+            height: 100%; */
             background-color: lightgray;
             justify-content: space-between;
             max-width: 381px;
@@ -218,7 +218,7 @@
         <div class="columns is-desktop">
             <div class="column block-1">
                 <div class="box" id = 'retry' style="display: none;"></div>
-                <div class="box" id = 'error' style="display: none;"></div>
+                <div class="box" id = 'error' style="display: none;"><button id="retry-button" class="button" style="display: none;">重试</button></div>
                 <div class="box" id = 'result-container' style="display: none;">
                     <h3 style = "text-align:center" >🧾 查询结果：</h3>
                     <div >
@@ -230,7 +230,7 @@
                     </div>
 
                 </div>
-                <button id="retry-button" style="display: none;">重试</button>
+                
 
                 <div id = "reqbox" class="box">
                     <div class="inputs is-centered">
