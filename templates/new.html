@@ -11,17 +11,24 @@
     <meta name="application-name" content="QLU空教室查询">
     <meta name="apple-mobile-web-app-capable" content="yes">
     <meta name="apple-mobile-web-app-status-bar-style" content="default">
-    <meta charset="UTF-8" name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=0.5, user-scalable=yes">
-    <link rel="shortcut icon" href="./static/img/QLUT.ico"/>
-    <link rel="bookmark" href="./static/img/QLUT.ico"/>
+    <meta charset="UTF-8" name="viewport"
+        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, minimum-scale=0.5, user-scalable=yes">
+    <link rel="shortcut icon" href="./static/img/QLUT.ico" />
+    <link rel="bookmark" href="./static/img/QLUT.ico" />
     <link rel="apple-touch-icon" href="./static/img/QLUT.ico">
     <link rel="apple-touch-icon" sizes="192x192" href="./static/img/QLUT.ico">
     <meta name="msapplication-TileColor" content="#222">
     <meta name="msapplication-square35x35logo" content="./static/img/QLUT.ico" />
-    <link crossorigin="anonymous" integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj+vDDLIL+xBGQU/voDBY5XE2lVh" href="https://lib.baomitu.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
-    <script crossorigin="anonymous" integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr+h5UfruuRL/aORyw+5+HZoU6e" src="https://lib.baomitu.com/aplayer/1.10.1/APlayer.min.js"></script>
-    <script crossorigin="anonymous" integrity="sha512-/IDbuuVE9yEqGRO0rCzXN1jIU1ZFkVd3TMLuK3HkmD4fCCwoIAkrqcK8KPYcIMDF/Z/pQ2mMOTPYS07qM/7VsA==" src="https://lib.baomitu.com/meting/2.0.1/Meting.min.js"></script>
-    <script crossorigin="anonymous" integrity="sha512-A/D/17S8jG62ka9f3jPwMs+bKGJ1f/xQts7bAUjTIKQf0anTGjlpuEz3q9q++3qRAVYKS3iVx6KzM8GPtIaYfw==" src="https://lib.baomitu.com/axios/1.3.4/axios.js"></script>
+    <link crossorigin="anonymous" integrity="sha384-tLMkTWh2pfXNWGFlUS0w1TFtRG5xZ9lPWFOooj+vDDLIL+xBGQU/voDBY5XE2lVh"
+        href="https://lib.baomitu.com/aplayer/1.10.1/APlayer.min.css" rel="stylesheet">
+    <script crossorigin="anonymous" integrity="sha384-gdGYZwHnfJM54evoZhpO0s6ZF5BQiybkiyW7VXr+h5UfruuRL/aORyw+5+HZoU6e"
+        src="https://lib.baomitu.com/aplayer/1.10.1/APlayer.min.js"></script>
+    <script crossorigin="anonymous"
+        integrity="sha512-/IDbuuVE9yEqGRO0rCzXN1jIU1ZFkVd3TMLuK3HkmD4fCCwoIAkrqcK8KPYcIMDF/Z/pQ2mMOTPYS07qM/7VsA=="
+        src="https://lib.baomitu.com/meting/2.0.1/Meting.min.js"></script>
+    <script crossorigin="anonymous"
+        integrity="sha512-A/D/17S8jG62ka9f3jPwMs+bKGJ1f/xQts7bAUjTIKQf0anTGjlpuEz3q9q++3qRAVYKS3iVx6KzM8GPtIaYfw=="
+        src="https://lib.baomitu.com/axios/1.3.4/axios.js"></script>
     <script async src="https://www.googletagmanager.com/gtag/js?id=G-Q68SN9YXQM"></script>
     <!-- <script>
     window.dataLayer = window.dataLayer || [];
@@ -31,14 +38,19 @@
     gtag('config', 'G-Q68SN9YXQM');
     </script> -->
 
-    
+
 
 
     <meta charset="UTF-8">
     <title>QLU空教室查询</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    {% if dark == "dark" %}
+    <link rel="stylesheet" href="https://unpkg.com/bulmaswatch/darkly/bulmaswatch.min.css">
+
+    {% else %}
+    <!-- <link rel="stylesheet" href="./bulma.css"> -->
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bulma/0.9.3/css/bulma.min.css">
-    
+    {% endif %}
     <style>
         /* Optional custom styles */
         .my-container {
@@ -73,12 +85,16 @@
         }
 
         .navbar {
-            background-color: #2560f679;
-            color: #fff;
+            /* background-color: #2560f679;
+            color: #fff; */
+        }
+
+        .display-none {
+            display: none;
         }
 
         .footer {
-            background-color: #f0f0f0;
+            /* background-color: #f0f0f0; */
         }
 
         .block1 {
@@ -95,7 +111,7 @@
             align-items: center;
             /* width: 100%;
             height: 100%; */
-            background-color: lightgray;
+            /* background-color: lightgray; */
             justify-content: space-between;
             max-width: 381px;
             margin-left: auto;
@@ -131,7 +147,7 @@
         .tip {
             /* 新增代码 */
             font-size: 14px;
-            color: #888;
+            /* color: #888; */
             margin-top: 5px;
         }
 
@@ -178,7 +194,12 @@
 
         <div id="navbarMenu" class="navbar-menu">
             <div class="navbar-start">
-                <!-- <a class="navbar-item" href="#">空教室查询</a> -->
+                {% if dark == "dark" %}
+                    <a class="navbar-item" href="./light">亮色页面</a>
+                {% else %}
+                    <a class="navbar-item" href="./dark">暗色页面</a>
+                {% endif %}
+                <a class="navbar-item" href="../old">旧版页面</a>
                 <a class="navbar-item" href="#">关于(此区域未完工)</a>
                 <a class="navbar-item" href="#">查看通知(此区域未完工)</a>
             </div>
@@ -217,33 +238,35 @@
     <div class="container my-container">
         <div class="columns is-desktop">
             <div class="column block-1">
-                <div class="box" id = 'retry' style="display: none;"></div>
-                <div class="box" id = 'error' style="display: none;"><button id="retry-button" class="button" style="display: none;">重试</button></div>
-                <div class="box" id = 'result-container' style="display: none;">
-                    <h3 style = "text-align:center" >🧾 查询结果：</h3>
-                    <div >
-                        <h3 style = "text-align:center" id="wek"></h3>
-                        <h4 style = "text-align:center">以下教室可用</h4>
-                        <p  style = "text-align:center"><button id="reset-button" class="button is-centered is-primary is-rounded">清空🔚</button></p>
-                        <ul id="result" style = "text-align:center"></ul>
-            
+                <div class="box" id='retry' style="display: none;"></div>
+                <div class="box" id='error' style="display: none;"><button id="retry-button" class="button"
+                        style="display: none;">重试</button></div>
+                <div class="box" id='result-container' style="display: none;">
+                    <h3 style="text-align:center">🧾 查询结果：</h3>
+                    <div>
+                        <h3 style="text-align:center" id="wek"></h3>
+                        <h4 style="text-align:center">以下教室可用</h4>
+                        <p style="text-align:center"><button id="reset-button"
+                                class="button is-centered is-primary is-rounded">清空🔚</button></p>
+                        <ul id="result" style="text-align:center"></ul>
+
                     </div>
 
                 </div>
-                
+                <button id="retry-button" style="display: none;">重试</button>
 
-                <div id = "reqbox" class="box">
+                <div id="reqbox" class="box">
                     <div class="inputs is-centered">
                         <div class="input-group">
                             <div class="label">周数：</div>
                             <div class="input-wrapper">
-                                <input id="weeks" class="input" type="number" placeholder="请输入周数" value="1">
+                                <input id="weeks" class="input" type="number" placeholder="请输入周数" value="{{def_week}}">
                             </div>
                         </div>
                         <div class="input-group">
                             <div class="label">星期数：</div>
                             <div class="input-wrapper">
-                                <input id="week_i" class="input" type="number" placeholder="请输入星期数" value="1">
+                                <input id="week_i" class="input" type="number" placeholder="请输入星期数" value="{{def_day}}">
                             </div>
                         </div>
                         <div class="tip">👆请写阿拉伯数字（若查询今天可空）<br>👇可以多选</div>
@@ -273,7 +296,7 @@
             <div class="column block-2 my-column">
                 <div class="box">
                     <h4 class="title is-4">图书馆有座区域</h4>
-                    <table  class="table is-striped is-fullwidth">
+                    <table class="table is-striped is-fullwidth">
                         <thead>
                             <tr>
                                 <th>区域</th>
@@ -282,7 +305,7 @@
                         </thead>
                         <tbody id='lib_av'>
                             <tr>
-                                <td>--</td>
+                                <td>Loading...</td>
                                 <td>--</td>
                             </tr>
                         </tbody>
@@ -292,7 +315,7 @@
             <div class="column block-3">
                 <div class="box">
                     <h4 class="title is-4">图书馆无座区域</h4>
-                    <table  class="table is-striped is-fullwidth">
+                    <table class="table is-striped is-fullwidth">
                         <thead>
                             <tr>
                                 <th>区域</th>
@@ -301,7 +324,7 @@
                         </thead>
                         <tbody id='lib_un'>
                             <tr>
-                                <td>--</td>
+                                <td>Loading...</td>
                                 <td>--</td>
                             </tr>
                         </tbody>
@@ -317,7 +340,7 @@
 
     <footer class="footer">
         <div class="content has-text-centered">
-            今日共获得 <div id="man">#</div>次访问<br>
+            今日共获得 <div id="man">Loading...</div>次访问<br>
             致谢：本站服务器托管于<a href="https://adam.sethome.cc"
                 target="_blank">齐鲁工业大学Adam战队</a>，网页原作者GitHub账号Annihilatexv,内网服务搭建人GitHub：Matt-wzy<br>视频聊天区可留言: <a
                 href="https://www.bilibili.com/video/BV1sT411C73i/?share_source=copy_web&amp;vd_source=1349826e7af1b515516bd815714d21a4"
